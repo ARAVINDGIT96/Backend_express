@@ -1,110 +1,115 @@
 /*
-## Build a Multi-Route Express Server
+## Build a Mini Library API 📚 (Using Express.js)
 
-### 🧱 1. Project Setup
+You’re now the backend developer of a simple **Library System**. Your goal is to build a RESTful API to manage books using Express.js.
 
-- Initialize a new Node.js project
-- Install required dependencies
-- Create the main server file
-*/
+---
+✅ Task: Create a Book Manager API
+Use an array of objects to represent books in your system.
+
+Each book should have:
+`id`, `title`, `author`, and `genre`.
+---
+Your API must support these routes:
+
+| GET | `/books` | Get all books |
+| GET | `/books/:id` | Get a single book by ID (URL param) |
+| POST | `/books` | Add a new book |
+| PUT | `/books/:id` | Replace full details of a book |
+| PATCH | `/books/:id` | Update part of a book’s information |
+| DELETE | `/books/:id` | Delete a book by ID |
+---
+
+### 🧠 Use These Concepts:
+
+- HTTP Methods (GET, POST, PUT, PATCH, DELETE)
+- Path Parameters (`:id`)
+- HTTP Status Codes (200, 201, 404, 500)
+*/ 
 
 
-step1:-
-cmd: npm init -y  //get package.json file
-cmd: npm install express //get dependencies in package-lock.json file
 
-// create server:-
 
 const express = require('express');
 const app = express();
-app.get('/',(req,res)=>
-{
-    res.send("Welcome to Home Page");
-});
-app.listen(3000,()=>
-{
-    console.log("Server is running at http://localhost:3000");
-});
+app.use(express.json());
+
+let books = [
+    { id: 1, title: "The Brave", author: "John", genre: "John Father" },
+    { id: 2, title: "The Soul", author: "Raghav", genre: "Raghav father" }
+];
 
 
-/*
-### 📄 2. Create a Basic Express Server
-
-- Import Express
-- Create an Express app
-- Set the app to listen on port `3000`
-*/
-
-
-// create server:-
-
-const express = require('express');
-const app = express();
-app.get('/',(req,res)=>
-{
-    res.send("Welcome to Home Page");
-});
-app.listen(3000,()=>
-{
-    console.log("Server is running at http://localhost:3000");
+app.get("/books", (req, res) => {
+    res.status(200).json(books);
 });
 
 
+app.get("/books/:id", (req, res) => {
+    const bookId = Number(req.params.id);
+    const book = books.find(b => b.id === bookId);
 
-
-/*
-### 🛣️ 3. Add the Following Routes
-
-Create individual routes for the following endpoints:
-
-- `GET /` → Respond with a welcome message
-- `GET /about` → Respond with an about page message
-- `GET /contact` → Respond with contact details
-- `GET /services` → Respond with a list of services (either array or JSON object)
-*/
-
-
-// create server:-
-
-const express = require('express');
-const app = express();
-app.get('/',(req,res)=>
-{
-    res.send("Welcome to Home Page");
+    if (book) {
+        res.status(200).json(book);
+    } else {
+        res.status(404).json({ message: "Book Not Found" });
+    }
 });
 
-app.get('/about',(req,res)=>
-{
-res.send("This is about page");    
+app.post("/books", (req, res) => {
+    const newBook = {
+        id: books.length + 1, 
+        title: req.body.title,
+        author: req.body.author,
+        genre: req.body.genre
+    };
+    books.push(newBook);
+    res.status(201).json({ message: "Book added successfully", book: newBook });
 });
-app.get('/contack',(req,res)=>
+app.patch('/books/:id',(req,res)=>
 {
-    res.send("This is contact page");
-    });
-    app.get('/services',(req,res)=>
-    {
-        res.send("This is services page");
-        });
+  const Id = Number(req.params.id);
+  const update = books.find((b)=>
+  {
+    return b.id === Id;
+  });
 
-app.listen(3000,()=>
-{
-    console.log("Server is running at http://localhost:3000");
+  update.title  = req.body.title;
+  update.author = req.body.author;
+  update.genre = req.body.genre;
+  res.status(200).send("Updated Succesfully");
 });
 
+app.delete("/books/:id",(req,res)=>
+{
+  const ID = Number(req.params.id);
+  const remain = books.filter((b)=>
+  {
+    return b.id !== ID;
+  });
+  books = remain;
+  res.status(200).json({ message: "Deleted Book Record", remainingBooks: books });
+});
 
-/*
-### 🔁 4. Use Nodemon
-
-- Run your server using `nodemon`
-- Ensure the server restarts automatically on code changes
-*/
-
-
-step1:cmd :- npm install nodemon
-step2: then change the scipts in package.json file 
- to 
- "scripts": {
-  "start": "node index.js",
-  "dev": "nodemon index.js"
-}
-step3: cmd:-  npm run dev
+app.put('/books/:id',(req,res)=>
+{
+  const number = Number(req.params.id);
+  const index   = books.findIndex((b)=>{
+    return b.id === number;
+  });
+  const replace = 
+  {
+    id : number,
+    title : req.body.title,
+    author : req.body.author,
+    genre : req.body.genre
+  };
+  books[index] = replace;
+  res.status(200).send(`Successfuly replaced ${replace}`);
+});
+app.listen(3000, () => {
+    console.log("Server is running at http://localhost:3000/books");
+    console.log("Server is running at (find): http://localhost:3000/books/1");
+    console.log("Server is running at (patch): http://localhost:3000/books/1");
+    console.log("Server is running at (delete): http://localhost:3000/1");
+});

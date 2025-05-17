@@ -1,6 +1,6 @@
 # 🧑‍💻 Express.js Assignment
 
-This repository contains **beginner-friendly Express.js coding exercise** to help you practice creating and handling multiple routes using Express.js.
+This repository contains **beginner-friendly Express.js coding exercise** to help you build a RESTful API to manage books using Express.js.
 
 
 
@@ -18,8 +18,8 @@ file contains:
 
 1. **Clone this repo** to your local machine:
    ```bash
-   git clone https://github.com/sdc-snist/Assignment-4-backend/
-   cd Assignment-4-backend
+   git clone https://github.com/sdc-snist/Assignment-5-backend/
+   cd Assignment-5-backend
 2. **Run the Code**:
    ```bash
    node index.js
